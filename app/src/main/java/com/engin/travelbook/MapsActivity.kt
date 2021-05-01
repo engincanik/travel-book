@@ -114,11 +114,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             dialog.setTitle("Are you sure?")
             dialog.setMessage(newPlace.address)
             dialog.setPositiveButton("Yes") { dialog, which ->
-                //Save
                 try {
                     val database = openOrCreateDatabase("Places", Context.MODE_PRIVATE, null)
                     database.execSQL("CREATE TABLE IF NOT EXISTS places (address VARCHAR, latitude DOUBLE, longitude DOUBLE)")
-                    val toCompile = "INSERT INTO places (name, latitude, longitude) VALUES (?, ?, ?)"
+                    val toCompile = "INSERT INTO places (address, latitude, longitude) VALUES (?, ?, ?)"
                     val sqLiteStatement = database.compileStatement(toCompile)
                     sqLiteStatement.bindString(1, newPlace.address)
                     sqLiteStatement.bindDouble(2, newPlace.latitude!!)
