@@ -1,4 +1,4 @@
-package com.engin.travelbook
+package com.engin.travelbook.Model
 
 import java.io.Serializable
 

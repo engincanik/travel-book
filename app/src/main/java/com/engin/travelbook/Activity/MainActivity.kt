@@ -1,4 +1,4 @@
-package com.engin.travelbook
+package com.engin.travelbook.Activity
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.engin.travelbook.adapter.RecyclerAdapter
+import com.engin.travelbook.Adapter.RecyclerAdapter
+import com.engin.travelbook.Model.Place
+import com.engin.travelbook.R
 
 class MainActivity : AppCompatActivity() {
     private var places = mutableListOf<Place>()

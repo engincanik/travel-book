@@ -1,16 +1,13 @@
-package com.engin.travelbook.adapter
+package com.engin.travelbook.Adapter
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.engin.travelbook.MapsActivity
-import com.engin.travelbook.Place
+import com.engin.travelbook.Activity.MapsActivity
+import com.engin.travelbook.Model.Place
 import com.engin.travelbook.R
 
 class RecyclerAdapter(private var places: List<Place>): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.engin.travelbook
+package com.engin.travelbook.Activity
 
 import android.Manifest
 import android.content.Context
@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.engin.travelbook.Model.Place
+import com.engin.travelbook.R
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
