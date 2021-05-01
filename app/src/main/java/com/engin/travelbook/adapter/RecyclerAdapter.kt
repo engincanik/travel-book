@@ -1,11 +1,15 @@
 package com.engin.travelbook.adapter
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.engin.travelbook.MapsActivity
 import com.engin.travelbook.Place
 import com.engin.travelbook.R
 
@@ -19,7 +23,9 @@ class RecyclerAdapter(private var places: List<Place>): RecyclerView.Adapter<Rec
         init {
             itemView.setOnClickListener { v: View ->
                 val position: Int = adapterPosition
-                Toast.makeText(itemView.context, "Item position: $position", Toast.LENGTH_LONG).show()
+                val intent = Intent(v.context, MapsActivity::class.java)
+                intent.putExtra("selectedPlace", places[position])
+                v.context.startActivity(intent)
             }
         }
     }

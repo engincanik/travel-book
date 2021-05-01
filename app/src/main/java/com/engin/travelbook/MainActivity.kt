@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         if (item.itemId == R.id.add_place_option) {
             val intent = Intent(applicationContext, MapsActivity::class.java)
             startActivity(intent)
+            finish()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -57,13 +58,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (places.isNotEmpty()) {
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = RecyclerAdapter(places)
-        }
-    }
     private fun addToList(place: Place) {
         places.add(place)
     }

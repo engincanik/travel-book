@@ -2,6 +2,7 @@ package com.engin.travelbook
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.LocationListener
@@ -30,21 +31,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intentToMain = Intent(this, MainActivity::class.java)
+        startActivity(intentToMain)
+        finish()
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapLongClickListener(mOnMapLongClickListener)
@@ -75,15 +73,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, 2, 2f, locationListener
             )
-            val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (lastLocation != null) {
-                val lastLocationLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLocationLatLng, 15f))
+            val intent = intent
+            var place = intent.getSerializableExtra("selectedPlace")
+            if (place != null) {
+                place = place as Place
+                mMap.clear()
+                val selectedLocation = LatLng(place.latitude!!, place.longitude!!)
+                mMap.addMarker(MarkerOptions().position(selectedLocation).title(place.address))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 15f))
+            } else {
+                val lastLocation =
+                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                if (lastLocation != null) {
+                    val lastLocationLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLocationLatLng, 15f))
+                }
             }
         }
     }
 
-    val mOnMapLongClickListener = GoogleMap.OnMapLongClickListener { latLng ->
+    private val mOnMapLongClickListener = GoogleMap.OnMapLongClickListener { latLng ->
         val geocoder = Geocoder(this, Locale.getDefault())
         var address = ""
         if (latLng != null) {
@@ -117,12 +126,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 try {
                     val database = openOrCreateDatabase("Places", Context.MODE_PRIVATE, null)
                     database.execSQL("CREATE TABLE IF NOT EXISTS places (address VARCHAR, latitude DOUBLE, longitude DOUBLE)")
-                    val toCompile = "INSERT INTO places (address, latitude, longitude) VALUES (?, ?, ?)"
+                    val toCompile =
+                        "INSERT INTO places (address, latitude, longitude) VALUES (?, ?, ?)"
                     val sqLiteStatement = database.compileStatement(toCompile)
                     sqLiteStatement.bindString(1, newPlace.address)
                     sqLiteStatement.bindDouble(2, newPlace.latitude!!)
                     sqLiteStatement.bindDouble(3, newPlace.longitude!!)
                     sqLiteStatement.execute()
+                    Toast.makeText(this, "New place has been added.", Toast.LENGTH_LONG).show()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
